@@ -4,83 +4,81 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <meta name="theme-color" content="#075e46">
-  <title>القرآن الكريم</title>
+  <meta name="theme-color" content="#123d2b">
+  <title>القرآن الكريم | استمع بقلبك</title>
   <style>
+    * { box-sizing: border-box; }
     body {
       margin: 0;
       font-family: Arial, sans-serif;
-      background: #f7f5ed;
-      color: #183b30;
+      background: #f6f3e9;
+      color: #173c2b;
       text-align: center;
     }
     header {
-      background: #075e46;
+      background: #123d2b;
       color: white;
-      padding: 25px 12px;
+      padding: 30px 16px;
+      border-radius: 0 0 25px 25px;
     }
-    h1 { margin: 0 0 10px; }
-    main { padding: 20px 14px; }
-    select, button {
-      font-size: 17px;
-      padding: 12px;
-      margin: 8px;
-      border-radius: 8px;
-    }
-    select { max-width: 95%; }
-    button {
-      background: #075e46;
-      color: white;
-      border: 0;
-    }
-    #quran {
+    header h1 { margin: 0 0 10px; font-size: 28px; }
+    header p { margin: 0; line-height: 1.8; }
+    main { max-width: 520px; margin: 25px auto; padding: 0 16px; }
+    .card {
       background: white;
-      padding: 20px;
-      margin-top: 20px;
-      border-radius: 12px;
-      font-size: 25px;
-      line-height: 2.2;
-      text-align: right;
+      padding: 22px;
+      border-radius: 18px;
+      box-shadow: 0 3px 14px #0000000c;
+      margin-bottom: 18px;
     }
-    .note { font-size: 14px; color: #666; }
+    label { display: block; margin-bottom: 12px; font-weight: bold; }
+    select, button {
+      width: 100%;
+      padding: 14px;
+      border-radius: 12px;
+      font-size: 16px;
+    }
+    select { border: 1px solid #c8d4ca; background: white; }
+    button {
+      margin-top: 14px;
+      border: none;
+      background: #17613e;
+      color: white;
+      font-weight: bold;
+      cursor: pointer;
+    }
+    button:disabled { opacity: .6; }
+    #message { line-height: 1.9; font-size: 14px; }
+    footer { padding: 20px; color: #607567; font-size: 13px; }
   </style>
 </head>
 <body>
   <header>
-    <h1>القرآن الكريم</h1>
-    <p>اقرأ القرآن الكريم أينما كنت</p>
+    <h1>☾ القرآن الكريم</h1>
+    <p>استمع إلى كلام الله في أي وقت<br>حتى بدون إنترنت بعد حفظ التلاوات</p>
   </header>
+
   <main>
-    <h3>اختر السورة</h3>
-    <select id="surah">
-      <option value="1">الفاتحة</option>
-      <option value="112">الإخلاص</option>
-      <option value="113">الفلق</option>
-      <option value="114">الناس</option>
-    </select>
-    <br>
-    <button onclick="loadSurah()">عرض السورة</button>
-    <div id="quran">بِسْمِ اللَّهِ الرَّحْمَٰنِ الرَّحِيمِ</div>
-    <p class="note">يلزم الاتصال بالإنترنت لجلب السور في هذه النسخة الأولية.</p>
+    <section class="card">
+      <h2>اختر القارئ</h2>
+      <label for="reciter">القارئ المفضل لديك</label>
+      <select id="reciter">
+        <option value="afs">عبدالباسط عبدالصمد</option>
+        <option value="min">محمد صديق المنشاوي</option>
+        <option value="hus">محمود خليل الحصري</option>
+        <option value="sud">عبدالرحمن السديس</option>
+        <option value="mish">مشاري راشد العفاسي</option>
+      </select>
+      <p id="message">دي النسخة الأولى من الموقع. لسه هنضيف نظام تنزيل الصوت وحفظه للتشغيل بدون إنترنت.</p>
+      <button id="download" disabled>تنزيل التلاوات — قيد التجهيز</button>
+    </section>
+
+    <section class="card">
+      <h2>مكتبتك الصوتية</h2>
+      <p>بعد إضافة نظام الحفظ، هتقدر تسمع التلاوات اللي نزّلتها من غير إنترنت.</p>
+    </section>
   </main>
-  <script>
-    async function loadSurah() {
-      const box = document.getElementById('quran');
-      box.textContent = 'جاري تحميل السورة...';
-      try {
-        const n = document.getElementById('surah').value;
-        const response = await fetch(
-          'https://api.alquran.cloud/v1/surah/' + n
-        );
-        if (!response.ok) throw new Error();
-        const result = await response.json();
-        box.textContent = result.data.ayahs.map(
-          a => a.text
-        ).join(' ۞ ');
-      } catch (e) {
-        box.textContent = 'تعذر التحميل. تأكد من اتصال الإنترنت.';
-      }
-    }
-  </script>
+
+  <footer>صدقة جارية — نسأل الله القبول</footer>
 </body>
 </html>
