@@ -92,5 +92,38 @@
   </main>
 
   <footer>صدقة جارية — نسأل الله القبول</footer>
+  <script>
+const reciter = document.getElementById("reciter");
+const surah = document.getElementById("surah");
+const player = document.getElementById("player");
+
+const reciters = {
+  mish: {
+    id: "ar.alafasy",
+    bitrate: 128
+  },
+  hus: {
+    id: "ar.husary",
+    bitrate: 128
+  }
+};
+
+function updateAudio() {
+  const selected = reciters[reciter.value];
+
+  if (!selected) return;
+
+  player.src =
+    "https://cdn.islamic.network/quran/audio-surah/" +
+    selected.bitrate + "/" +
+    selected.id + "/" +
+    surah.value + ".mp3";
+
+  player.load();
+}
+
+reciter.addEventListener("change", updateAudio);
+surah.addEventListener("change", updateAudio);
+</script>
 </body>
 </html>
