@@ -93,37 +93,53 @@
 
   <footer>صدقة جارية — نسأل الله القبول</footer>
   <script>
+
 const reciter = document.getElementById("reciter");
 const surah = document.getElementById("surah");
 const player = document.getElementById("player");
+const audioMessage = document.getElementById("audioMessage");
 
 const reciters = {
-  mish: {
-    id: "ar.alafasy",
-    bitrate: 128
-  },
-  hus: {
-    id: "ar.husary",
-    bitrate: 128
-  }
+  mish: "ar.alafasy",
+  hus: "ar.husary",
+  min: "ar.minshawi",
+  sud: "ar.abdurrahmaansudais",
+  shuraim: "ar.saoodshuraym",
+  ghamdi: "ar.saadalghamdi",
+  afs: "ar.abdulbasitmurattal",
+  maher: "ar.mahermuaiqly",
+  abbad: "ar.faresabbad",
+  abkar: "ar.idreesabkar"
 };
 
 function updateAudio() {
-  const selected = reciters[reciter.value];
+  const edition = reciters[reciter.value];
+  const surahNumber = Number(surah.value);
 
-  if (!selected) return;
+  if (!edition || !surahNumber) {
+    audioMessage.textContent = "اختار القارئ والسورة.";
+    return;
+  }
 
   player.src =
-    "https://cdn.islamic.network/quran/audio-surah/" +
-    selected.bitrate + "/" +
-    selected.id + "/" +
-    surah.value + ".mp3";
+    "https://cdn.islamic.network/quran/audio-surah/128/" +
+    edition + "/" + surahNumber + ".mp3";
 
   player.load();
+  audioMessage.textContent =
+    "اضغط تشغيل لاختبار التلاوة. لو ظهر خطأ، هنراجع رابط القارئ.";
 }
 
 reciter.addEventListener("change", updateAudio);
 surah.addEventListener("change", updateAudio);
+
+player.addEventListener("error", () => {
+  audioMessage.textContent =
+    "تعذر تشغيل الصوت لهذا القارئ. محتاجين نتحقق من رابط التسجيل.";
+});
+
+updateAudio();
+
 </script>
   <script>
 if ("serviceWorker" in navigator) {
