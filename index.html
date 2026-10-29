@@ -125,5 +125,12 @@ function updateAudio() {
 reciter.addEventListener("change", updateAudio);
 surah.addEventListener("change", updateAudio);
 </script>
+  <script>
+if ("serviceWorker" in navigator) {
+  window.addEventListener("load", () => {
+    navigator.serviceWorker.register("./sw.js");
+  });
+}
+</script>
 </body>
 </html>
