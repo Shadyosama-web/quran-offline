@@ -1,0 +1,592 @@
+
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="theme-color" content="#071321">
+<title>القرآن الكريم | استمع بقلبك</title>
+
+<style>
+:root {
+  --bg:#071321;
+  --panel:#112238;
+  --gold:#e8bd70;
+  --gold-light:#ffe4ad;
+  --white:#f8f4eb;
+  --muted:#aeb9c8;
+}
+* {box-sizing:border-box}
+body {
+  margin:0;
+  color:var(--white);
+  font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Tahoma,Arial,sans-serif;
+  background:
+    radial-gradient(ellipse at 50% 0%,#263e5a,transparent 48%),
+    linear-gradient(160deg,#071321,#030914);
+  min-height:100vh;
+}
+button,select {font:inherit}
+.page {max-width:760px;margin:auto;padding:18px 14px 35px}
+.hero {
+  min-height:290px;
+  position:relative;
+  overflow:hidden;
+  text-align:center;
+  padding:35px 20px;
+  border:1px solid #e8bd7055;
+  border-radius:26px;
+  background:
+    radial-gradient(circle at 50% 100%,#b58b4a35,transparent 40%),
+    linear-gradient(145deg,#1b3450,#071321 75%);
+  box-shadow:0 18px 45px #0008;
+}
+.hero:before {
+  content:"";
+  position:absolute;
+  inset:0;
+  opacity:.12;
+  background-image:
+    repeating-linear-gradient(45deg,transparent 0 24px,#e8bd70 25px 26px,transparent 27px 49px),
+    repeating-linear-gradient(-45deg,transparent 0 24px,#e8bd70 25px 26px,transparent 27px 49px);
+  mask-image:linear-gradient(to bottom,black,transparent 75%);
+}
+.moon {
+  position:absolute;
+  top:22px;
+  left:28px;
+  font-size:48px;
+  color:var(--gold-light);
+  text-shadow:0 0 25px var(--gold);
+}
+.mosque {font-size:53px;margin-top:24px}
+.hero h1 {
+  color:var(--gold-light);
+  font-size:clamp(34px,8vw,52px);
+  margin:10px 0;
+  text-shadow:0 3px 20px #e8bd7044;
+}
+.hero p {font-size:17px;color:#e9e1d5;margin:0}
+.ornament {color:var(--gold);margin-top:22px;letter-spacing:7px}
+.panel {
+  margin-top:19px;
+  padding:22px;
+  border:1px solid #e8bd7066;
+  border-radius:24px;
+  background:linear-gradient(145deg,#192d44ee,#091625f5);
+  box-shadow:0 14px 38px #0007,inset 0 1px 15px #ffffff08;
+}
+.heading {
+  color:var(--gold-light);
+  font-size:23px;
+  margin:0 0 20px;
+}
+.heading span {margin-left:8px}
+.field {margin:15px 0}
+label {
+  display:block;
+  color:#e6d2ac;
+  margin-bottom:9px;
+  font-size:14px;
+}
+select {
+  width:100%;
+  padding:15px;
+  color:white;
+  background:#091727;
+  border:1px solid var(--gold);
+  border-radius:14px;
+  outline:none;
+}
+select option {background:#091727}
+.btn {
+  width:100%;
+  border-radius:40px;
+  padding:15px;
+  margin-top:12px;
+  font-weight:750;
+  font-size:16px;
+  cursor:pointer;
+}
+.play {
+  color:#17202c;
+  border:1px solid var(--gold-light);
+  background:linear-gradient(110deg,#ffe5ad,#d49b48);
+  box-shadow:0 7px 22px #d69b4740;
+}
+.download {
+  color:var(--white);
+  border:1px solid var(--gold);
+  background:linear-gradient(110deg,#20344b,#0a1728);
+}
+.btn:disabled {opacity:.55;cursor:wait}
+.player-box {
+  margin-top:18px;
+  padding:15px;
+  border-radius:17px;
+  background:#071321;
+  border:1px solid #ffffff20;
+}
+.now {
+  color:var(--gold-light);
+  font-weight:bold;
+  margin-bottom:12px;
+}
+audio {width:100%;height:42px}
+.status {
+  color:var(--muted);
+  font-size:13px;
+  min-height:20px;
+  margin-top:10px;
+}
+.progress {
+  height:5px;
+  background:#ffffff18;
+  border-radius:8px;
+  overflow:hidden;
+  margin-top:12px;
+  display:none;
+}
+.progress div {
+  height:100%;
+  width:0;
+  background:var(--gold);
+}
+.library-item {
+  display:flex;
+  align-items:center;
+  gap:10px;
+  padding:13px 10px;
+  margin-top:11px;
+  border:1px solid #ffffff20;
+  border-radius:16px;
+  background:linear-gradient(110deg,#1b2d42,#0c1929);
+}
+.info {flex:1;min-width:0}
+.info strong {display:block;font-size:15px}
+.info small {display:block;color:var(--muted);margin-top:5px}
+.saved {color:#54d69c;font-size:12px;margin-top:5px}
+.small-btn {
+  width:40px;
+  height:40px;
+  flex-shrink:0;
+  border:1px solid var(--gold);
+  border-radius:50%;
+  background:#101e30;
+  color:var(--gold-light);
+  font-size:17px;
+  cursor:pointer;
+}
+.remove {border-color:#a85d5d;color:#ffaaaa}
+.empty {text-align:center;color:var(--muted);padding:20px 5px}
+.footer {
+  text-align:center;
+  color:var(--gold-light);
+  padding:25px 10px;
+}
+.footer small {
+  display:block;
+  color:var(--muted);
+  margin-top:9px;
+}
+.nav {
+  display:flex;
+  justify-content:space-around;
+  padding:14px 8px;
+  margin-top:8px;
+  border:1px solid #ffffff20;
+  border-radius:19px;
+  background:#0d1a2b;
+}
+.nav a {
+  color:#e1c99d;
+  text-decoration:none;
+  text-align:center;
+  font-size:12px;
+}
+.nav span {display:block;font-size:21px;margin-bottom:5px}
+@media(min-width:600px) {
+  .page {padding-top:28px}
+  .hero {padding-top:45px}
+  .panel {padding:27px}
+}
+</style>
+</head>
+
+<body>
+<main class="page">
+
+<header class="hero">
+  <div class="moon">☾</div>
+  <div class="mosque">🕌</div>
+  <h1>القرآن الكريم</h1>
+  <p>استمع بقلبك إلى كلام الله</p>
+  <div class="ornament">✧ ━━━━━ ❖ ━━━━━ ✧</div>
+</header>
+
+<section class="panel" id="home">
+  <h2 class="heading"><span>🎧</span> اختر القارئ والسورة</h2>
+
+  <div class="field">
+    <label for="reciter">القارئ</label>
+    <select id="reciter">
+      <option value="mish">مشاري راشد العفاسي</option>
+      <option value="afs">عبدالباسط عبدالصمد</option>
+    </select>
+  </div>
+
+  <div class="field">
+    <label for="surah">السورة</label>
+    <select id="surah"></select>
+  </div>
+
+  <button class="btn play" id="playBtn">▶ تشغيل التلاوة</button>
+  <button class="btn download" id="downloadBtn">⇩ تنزيل السورة للاستماع بدون إنترنت</button>
+
+  <div class="player-box">
+    <div class="now" id="nowPlaying">اختر السورة لبدء الاستماع</div>
+    <audio id="player" controls preload="none"></audio>
+    <div class="progress" id="progress"><div id="progressBar"></div></div>
+    <div class="status" id="status">جاهز للاستماع</div>
+  </div>
+</section>
+
+<section class="panel" id="library">
+  <h2 class="heading"><span>📚</span> مكتبتي الصوتية</h2>
+  <p style="color:var(--muted)">السور التي حفظتها على جهازك</p>
+  <div id="libraryList">
+    <div class="empty">لم تقم بحفظ أي سورة حتى الآن</div>
+  </div>
+</section>
+
+<footer class="footer">
+  ✧ صدقة جارية — نسأل الله القبول ✧
+  <small>القرآن الكريم | استمع بقلبك</small>
+</footer>
+
+<nav class="nav">
+  <a href="#home"><span>⌂</span>الرئيسية</a>
+  <a href="#library"><span>▤</span>مكتبتي</a>
+  <a href="#about"><span>⚙</span>معلومات</a>
+</nav>
+
+<section id="about" class="empty">
+  يتم حفظ السور على نفس الجهاز والمتصفح المستخدمين في التنزيل.
+</section>
+
+</main>
+
+<script>
+"use strict";
+
+const reciters = {
+  mish: "ar.alafasy",
+  afs: "ar.abdulbasitmurattal"
+};
+
+const surahs = [
+"الفاتحة","البقرة","آل عمران","النساء","المائدة","الأنعام","الأعراف","الأنفال","التوبة","يونس",
+"هود","يوسف","الرعد","إبراهيم","الحجر","النحل","الإسراء","الكهف","مريم","طه",
+"الأنبياء","الحج","المؤمنون","النور","الفرقان","الشعراء","النمل","القصص","العنكبوت","الروم",
+"لقمان","السجدة","الأحزاب","سبأ","فاطر","يس","الصافات","ص","الزمر","غافر",
+"فصلت","الشورى","الزخرف","الدخان","الجاثية","الأحقاف","محمد","الفتح","الحجرات","ق",
+"الذاريات","الطور","النجم","القمر","الرحمن","الواقعة","الحديد","المجادلة","الحشر","الممتحنة",
+"الصف","الجمعة","المنافقون","التغابن","الطلاق","التحريم","الملك","القلم","الحاقة","المعارج",
+"نوح","الجن","المزمل","المدثر","القيامة","الإنسان","المرسلات","النبأ","النازعات","عبس",
+"التكوير","الانفطار","المطففين","الانشقاق","البروج","الطارق","الأعلى","الغاشية","الفجر","البلد",
+"الشمس","الليل","الضحى","الشرح","التين","العلق","القدر","البينة","الزلزلة","العاديات",
+"القارعة","التكاثر","العصر","الهمزة","الفيل","قريش","الماعون","الكوثر","الكافرون","النصر",
+"المسد","الإخلاص","الفلق","الناس"
+];
+
+const reciterSelect = document.getElementById("reciter");
+const surahSelect = document.getElementById("surah");
+const player = document.getElementById("player");
+const statusBox = document.getElementById("status");
+const nowPlaying = document.getElementById("nowPlaying");
+const downloadBtn = document.getElementById("downloadBtn");
+const playBtn = document.getElementById("playBtn");
+const libraryList = document.getElementById("libraryList");
+const progress = document.getElementById("progress");
+const progressBar = document.getElementById("progressBar");
+
+let db = null;
+let currentObjectUrl = null;
+
+surahs.forEach((name,index) => {
+  const option = document.createElement("option");
+  option.value = String(index+1);
+  option.textContent = `سورة ${name}`;
+  surahSelect.appendChild(option);
+});
+
+function audioUrl(reciter,surah) {
+  return `https://cdn.islamic.network/quran/audio-surah/128/${reciters[reciter]}/${surah}.mp3`;
+}
+
+function keyFor(reciter,surah) {
+  return `${reciter}_${surah}`;
+}
+
+function setStatus(message) {
+  statusBox.textContent = message;
+}
+
+function clearAudio() {
+  player.pause();
+  player.removeAttribute("src");
+  player.load();
+
+  if(currentObjectUrl) {
+    URL.revokeObjectURL(currentObjectUrl);
+    currentObjectUrl = null;
+  }
+}
+
+function setAudio(url) {
+  clearAudio();
+  player.src = url;
+  player.load();
+}
+
+function openDatabase() {
+  return new Promise((resolve,reject) => {
+    const request = indexedDB.open("QuranOfflineLibrary",1);
+
+    request.onupgradeneeded = () => {
+      const database = request.result;
+      if(!database.objectStoreNames.contains("audio")) {
+        database.createObjectStore("audio",{keyPath:"key"});
+      }
+    };
+
+    request.onsuccess = () => resolve(request.result);
+    request.onerror = () => reject(request.error);
+  });
+}
+
+function getSaved(key) {
+  return new Promise((resolve,reject) => {
+    const transaction = db.transaction("audio","readonly");
+    const request = transaction.objectStore("audio").get(key);
+    request.onsuccess = () => resolve(request.result || null);
+    request.onerror = () => reject(request.error);
+  });
+}
+
+function getAllSaved() {
+  return new Promise((resolve,reject) => {
+    const transaction = db.transaction("audio","readonly");
+    const request = transaction.objectStore("audio").getAll();
+    request.onsuccess = () => resolve(request.result || []);
+    request.onerror = () => reject(request.error);
+  });
+}
+
+function saveAudio(record) {
+  return new Promise((resolve,reject) => {
+    const transaction = db.transaction("audio","readwrite");
+    transaction.objectStore("audio").put(record);
+    transaction.oncomplete = () => resolve();
+    transaction.onerror = () => reject(transaction.error);
+    transaction.onabort = () => reject(transaction.error);
+  });
+}
+
+function removeSaved(key) {
+  return new Promise((resolve,reject) => {
+    const transaction = db.transaction("audio","readwrite");
+    transaction.objectStore("audio").delete(key);
+    transaction.oncomplete = () => resolve();
+    transaction.onerror = () => reject(transaction.error);
+  });
+}
+
+async function loadSelection() {
+  const reciter = reciterSelect.value;
+  const surah = Number(surahSelect.value);
+  const name = surahs[surah-1];
+
+  nowPlaying.textContent =
+    `سورة ${name} — ${reciterSelect.options[reciterSelect.selectedIndex].text}`;
+
+  try {
+    const saved = await getSaved(keyFor(reciter,surah));
+
+    if(saved) {
+      currentObjectUrl = URL.createObjectURL(saved.blob);
+      setAudio(currentObjectUrl);
+      setStatus("السورة محفوظة على جهازك للاستماع دون إنترنت");
+    } else {
+      setAudio(audioUrl(reciter,surah));
+      setStatus("السورة جاهزة للتشغيل عبر الإنترنت");
+    }
+  } catch(error) {
+    setAudio(audioUrl(reciter,surah));
+    setStatus("تعذر الوصول إلى المكتبة المحفوظة");
+  }
+}
+
+async function playSelection() {
+  await loadSelection();
+
+  try {
+    await player.play();
+    setStatus("جاري تشغيل التلاوة");
+  } catch(error) {
+    setStatus("اضغط زر التشغيل داخل مشغل الصوت");
+  }
+}
+
+async function downloadSelection() {
+  const reciter = reciterSelect.value;
+  const surah = Number(surahSelect.value);
+  const name = surahs[surah-1];
+
+  downloadBtn.disabled = true;
+  progress.style.display = "block";
+  progressBar.style.width = "8%";
+  setStatus("جاري تنزيل السورة، برجاء الانتظار...");
+
+  try {
+    const response = await fetch(audioUrl(reciter,surah));
+
+    if(!response.ok) {
+      throw new Error("Audio download failed");
+    }
+
+    const blob = await response.blob();
+
+    if(!blob.size) {
+      throw new Error("Empty audio file");
+    }
+
+    await saveAudio({
+      key:keyFor(reciter,surah),
+      reciter,
+      surah,
+      name,
+      reciterName:reciterSelect.options[reciterSelect.selectedIndex].text,
+      blob,
+      savedAt:Date.now()
+    });
+
+    progressBar.style.width = "100%";
+    setStatus("تم حفظ السورة بنجاح على جهازك");
+    await renderLibrary();
+    await loadSelection();
+
+  } catch(error) {
+    console.error(error);
+    setStatus("تعذر التنزيل. قد يمنع خادم الصوت التحميل من المتصفح. حاول مرة أخرى.");
+  } finally {
+    downloadBtn.disabled = false;
+
+    setTimeout(() => {
+      progress.style.display = "none";
+      progressBar.style.width = "0";
+    },1200);
+  }
+}
+
+async function renderLibrary() {
+  try {
+    const records = await getAllSaved();
+
+    if(!records.length) {
+      libraryList.innerHTML =
+        '<div class="empty">لم تقم بحفظ أي سورة حتى الآن</div>';
+      return;
+    }
+
+    libraryList.innerHTML = "";
+    records.sort((a,b) => a.surah-b.surah);
+
+    records.forEach(record => {
+      const item = document.createElement("div");
+      item.className = "library-item";
+
+      const info = document.createElement("div");
+      info.className = "info";
+
+      const title = document.createElement("strong");
+      title.textContent = `سورة ${record.name}`;
+
+      const subtitle = document.createElement("small");
+      subtitle.textContent = record.reciterName;
+
+      const saved = document.createElement("div");
+      saved.className = "saved";
+      saved.textContent = "✓ محفوظة على الجهاز";
+
+      info.append(title,subtitle,saved);
+
+      const play = document.createElement("button");
+      play.className = "small-btn";
+      play.textContent = "▶";
+      play.title = "تشغيل السورة";
+
+      play.addEventListener("click",async() => {
+        reciterSelect.value = record.reciter;
+        surahSelect.value = String(record.surah);
+
+        setAudio(URL.createObjectURL(record.blob));
+        nowPlaying.textContent =
+          `سورة ${record.name} — ${record.reciterName}`;
+
+        try {
+          await player.play();
+          setStatus("تشغيل من المكتبة المحفوظة");
+        } catch(error) {
+          setStatus("اضغط تشغيل داخل مشغل الصوت");
+        }
+
+        window.scrollTo({top:0,behavior:"smooth"});
+      });
+
+      const remove = document.createElement("button");
+      remove.className = "small-btn remove";
+      remove.textContent = "×";
+      remove.title = "حذف السورة";
+
+      remove.addEventListener("click",async() => {
+        if(!confirm(`هل تريد حذف سورة ${record.name} من جهازك؟`)) return;
+
+        await removeSaved(record.key);
+        await renderLibrary();
+        await loadSelection();
+      });
+
+      item.append(info,play,remove);
+      libraryList.appendChild(item);
+    });
+
+  } catch(error) {
+    libraryList.innerHTML =
+      '<div class="empty">تعذر عرض المكتبة الصوتية</div>';
+  }
+}
+
+reciterSelect.addEventListener("change",loadSelection);
+surahSelect.addEventListener("change",loadSelection);
+playBtn.addEventListener("click",playSelection);
+downloadBtn.addEventListener("click",downloadSelection);
+
+(async() => {
+  try {
+    db = await openDatabase();
+    await renderLibrary();
+    await loadSelection();
+
+    if("serviceWorker" in navigator) {
+      navigator.serviceWorker.register("./sw.js")
+        .catch(error => console.log(error));
+    }
+  } catch(error) {
+    setStatus("تعذر تشغيل التخزين المحلي على هذا المتصفح");
+  }
+})();
+</script>
+
+</body>
+</html>
