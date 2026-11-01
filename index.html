@@ -1,145 +1,50 @@
 
-<!DOCTYPE html>
-<html lang="ar" dir="rtl">
-<head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <meta name="theme-color" content="#123d2b">
-  <title>القرآن الكريم | استمع بقلبك</title>
-  <style>
-    * { box-sizing: border-box; }
-    body {
-      margin: 0;
-      font-family: Arial, sans-serif;
-      background: #f6f3e9;
-      color: #173c2b;
-      text-align: center;
-    }
-    header {
-      background: #123d2b;
-      color: white;
-      padding: 30px 16px;
-      border-radius: 0 0 25px 25px;
-    }
-    header h1 { margin: 0 0 10px; font-size: 28px; }
-    header p { margin: 0; line-height: 1.8; }
-    main { max-width: 520px; margin: 25px auto; padding: 0 16px; }
-    .card {
-      background: white;
-      padding: 22px;
-      border-radius: 18px;
-      box-shadow: 0 3px 14px #0000000c;
-      margin-bottom: 18px;
-    }
-    label { display: block; margin-bottom: 12px; font-weight: bold; }
-    select, button {
-      width: 100%;
-      padding: 14px;
-      border-radius: 12px;
-      font-size: 16px;
-    }
-    select { border: 1px solid #c8d4ca; background: white; }
-    button {
-      margin-top: 14px;
-      border: none;
-      background: #17613e;
-      color: white;
-      font-weight: bold;
-      cursor: pointer;
-    }
-    button:disabled { opacity: .6; }
-    #message { line-height: 1.9; font-size: 14px; }
-    footer { padding: 20px; color: #607567; font-size: 13px; }
-  </style>
-</head>
-<body>
-  <header>
-    <h1>☾ القرآن الكريم</h1>
-    <p>استمع إلى كلام الله في أي وقت<br>حتى بدون إنترنت بعد حفظ التلاوات</p>
-  </header>
+const CACHE_NAME = "quran-site-v1";
+const FILES_TO_CACHE = [
+  "./",
+  "./index.html"
+];
 
-  <main>
-    <section class="card">
-      <h2>اختر القارئ</h2>
-      <label for="reciter">القارئ المفضل لديك</label>
-      <select id="reciter">
-        <option value="afs">عبدالباسط عبدالصمد</option>
-        <option value="mish">مشاري راشد العفاسي</option>
-
-      </select>
-      <p id="message">دي النسخة الأولى من الموقع. لسه هنضيف نظام تنزيل الصوت وحفظه للتشغيل بدون إنترنت.</p>
-      <button id="download" disabled>تنزيل التلاوات — قيد التجهيز</button>
-    </section>
-
-    <section class="card">
-      <h2>مكتبتك الصوتية</h2>
-      <p>بعد إضافة نظام الحفظ، هتقدر تسمع التلاوات اللي نزّلتها من غير إنترنت.</p>
-       <h3>تجربة الاستماع</h3>
-<label for="surah">اختر السورة</label>
-<select id="surah">
-  <option value="001">سورة الفاتحة</option>
-</select>
-<audio id="player" controls preload="none" style="width:100%; margin-top:15px;" src="https://cdn.islamic.network/quran/audio-surah/128/ar.alafasy/1.mp3"></audio>
-<p id="audioMessage">مشغّل الصوت جاهز للتوصيل بالتسجيلات.</p>
-    </section>
-  </main>
-
-  <footer>صدقة جارية — نسأل الله القبول</footer>
-  <script>
-
-const reciter = document.getElementById("reciter");
-const surah = document.getElementById("surah");
-const player = document.getElementById("player");
-const audioMessage = document.getElementById("audioMessage");
-
-const reciters = {
-  mish: "ar.alafasy",
-  hus: "ar.husary",
-  min: "ar.minshawi",
-  sud: "ar.abdurrahmaansudais",
-  shuraim: "ar.saoodshuraym",
-  ghamdi: "ar.saadalghamdi",
-  afs: "ar.abdulbasitmurattal",
-  maher: "ar.mahermuaiqly",
-  abbad: "ar.faresabbad",
-  abkar: "ar.idreesabkar"
-};
-
-function updateAudio() {
-  const edition = reciters[reciter.value];
-  const surahNumber = Number(surah.value);
-
-  if (!edition || !surahNumber) {
-    audioMessage.textContent = "اختار القارئ والسورة.";
-    return;
-  }
-
-  player.src =
-    "https://cdn.islamic.network/quran/audio-surah/128/" +
-    edition + "/" + surahNumber + ".mp3";
-
-  player.load();
-  audioMessage.textContent =
-    "اضغط تشغيل لاختبار التلاوة. لو ظهر خطأ، هنراجع رابط القارئ.";
-}
-
-reciter.addEventListener("change", updateAudio);
-surah.addEventListener("change", updateAudio);
-
-player.addEventListener("error", () => {
-  audioMessage.textContent =
-    "تعذر تشغيل الصوت لهذا القارئ. محتاجين نتحقق من رابط التسجيل.";
+self.addEventListener("install", event => {
+  event.waitUntil(
+    caches.open(CACHE_NAME)
+      .then(cache => cache.addAll(FILES_TO_CACHE))
+      .then(() => self.skipWaiting())
+  );
 });
 
-updateAudio();
+self.addEventListener("activate", event => {
+  event.waitUntil(
+    caches.keys().then(keys =>
+      Promise.all(
+        keys
+          .filter(key => key !== CACHE_NAME)
+          .map(key => caches.delete(key))
+      )
+    ).then(() => self.clients.claim())
+  );
+});
 
-</script>
-  <script>
-if ("serviceWorker" in navigator) {
-  window.addEventListener("load", () => {
-    navigator.serviceWorker.register("./sw.js");
-  });
-}
-</script>
-</body>
-</html>
+self.addEventListener("fetch", event => {
+  const request = event.request;
+
+  if (request.method !== "GET") return;
+
+  const url = new URL(request.url);
+
+  if (url.origin !== self.location.origin) return;
+
+  event.respondWith(
+    caches.match(request).then(cached => {
+      if (cached) return cached;
+
+      return fetch(request).then(response => {
+        if (response.ok) {
+          const copy = response.clone();
+          caches.open(CACHE_NAME).then(cache => cache.put(request, copy));
+        }
+        return response;
+      });
+    })
+  );
+});
